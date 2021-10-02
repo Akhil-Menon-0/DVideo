@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import DVideo from '../abis/DVideo.json'
 import Navbar from './Navbar'
+import Auth from './Auth'
 import Main from './Main'
 import Web3 from 'web3';
+import ethUtil from 'ethereumjs-util';
+import sigUtil from 'eth-sig-util'
 import './App.css';
 
 //Declare IPFS
@@ -37,14 +40,14 @@ class App extends Component {
     // Network ID
     const networkId = await web3.eth.net.getId()
     const networkData = DVideo.networks[networkId]
-    if(networkData) {
+    if (networkData) {
       const dvideo = new web3.eth.Contract(DVideo.abi, networkData.address)
       this.setState({ dvideo })
       const videosCount = await dvideo.methods.videoCount().call()
       this.setState({ videosCount })
 
       // Load videos, sort by newest
-      for (var i=videosCount; i>=1; i--) {
+      for (var i = videosCount; i >= 1; i--) {
         const video = await dvideo.methods.videos(i).call()
         this.setState({
           videos: [...this.state.videos, video]
@@ -57,7 +60,7 @@ class App extends Component {
         currentHash: latest.hash,
         currentTitle: latest.title
       })
-      this.setState({ loading: false})
+      this.setState({ loading: false })
     } else {
       window.alert('DVideo contract not deployed to detected network.')
     }
@@ -82,12 +85,13 @@ class App extends Component {
     //adding file to the IPFS
     ipfs.add(this.state.buffer, (error, result) => {
       console.log('IPFS result', result)
-      if(error) {
+      if (error) {
         console.error(error)
         return
       }
 
       this.setState({ loading: true })
+      console.log(result[0].hash)
       this.state.dvideo.methods.uploadVideo(result[0].hash, title).send({ from: this.state.account }).on('transactionHash', (hash) => {
         this.setState({ loading: false })
       })
@@ -95,9 +99,33 @@ class App extends Component {
   }
 
   changeVideo = (hash, title) => {
-    this.setState({'currentHash': hash});
-    this.setState({'currentTitle': title});
+    this.setState({ 'currentHash': hash });
+    this.setState({ 'currentTitle': title });
   }
+
+  signAndSend = (user) => {
+    const web3 = window.web3
+    var msg = ethUtil.bufferToHex(new Buffer(user, 'utf8'));
+    var params = [msg, this.state.account]
+    var method = "personal_sign"
+    var from = this.state.account
+    web3.currentProvider.sendAsync({
+      method,
+      params,
+      from
+    }, (err, result) => {
+      if (err) { console.log(err); return false; }
+      method = 'personal_ecRecover';
+      var params = [msg, result.result];
+      web3.currentProvider.sendAsync({
+        method, params, from
+      }, (err, result) => {
+        if (err) { console.log(err); }
+        console.log(result.result)
+      })
+    })
+  }
+
 
   constructor(props) {
     super(props)
@@ -119,19 +147,20 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Navbar 
+        <Navbar
           account={this.state.account}
         />
-        { this.state.loading
+        <Auth signAndSend={this.signAndSend} />
+        {this.state.loading
           ? <div id="loader" className="text-center mt-5"><p>Loading...</p></div>
           : <Main
-              videos={this.state.videos}
-              uploadVideo={this.uploadVideo}
-              captureFile={this.captureFile}
-              changeVideo={this.changeVideo}
-              currentHash={this.state.currentHash}
-              currentTitle={this.state.currentTitle}
-            />
+            videos={this.state.videos}
+            uploadVideo={this.uploadVideo}
+            captureFile={this.captureFile}
+            changeVideo={this.changeVideo}
+            currentHash={this.state.currentHash}
+            currentTitle={this.state.currentTitle}
+          />
         }
       </div>
     );
