@@ -1,4 +1,4 @@
-import React, { Component, useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import DVideo from '../abis/DVideo.json'
 import Web3 from 'web3';
 import './App.css';
@@ -72,10 +72,13 @@ function App() {
 
   const [init, setinit] = useState(true)
 
-  useEffect(async () => {
-    // await loadWeb3();
-    // await loadBlockchainData(setAccount, setVideoContract, setUserContract, setVideoCount, setVideos, videos, setCurrentHash, setCurrentTitle, setinit);
-    setinit(false)
+  useEffect(() => {
+    async function fetchData() {
+      // await loadWeb3();
+      // await loadBlockchainData(setAccount, setVideoContract, setUserContract, setVideoCount, setVideos, videos, setCurrentHash, setCurrentTitle, setinit);
+      setinit(false)
+    }
+    fetchData();
   }, [])
 
   if (init === true) {
