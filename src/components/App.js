@@ -31,7 +31,7 @@ async function loadWeb3() {
   }
 }
 
-async function loadBlockchainData(setAccount, setVideoContract, setUserContract, setVideoCount, setVideos, videos, setCurrentHash, setCurrentTitle, setinit) {
+async function loadBlockchainData(setAccount, setVideoContract, setUserContract, setVideoCount, setVideos, videos, setCurrentHash, setCurrentTitle) {
   const web3 = window.web3
   // Load account
   const accounts = await web3.eth.getAccounts()
@@ -56,7 +56,6 @@ async function loadBlockchainData(setAccount, setVideoContract, setUserContract,
     const latest = await dvideo.methods.videos(videosCount).call()
     setCurrentHash(latest.hash);
     setCurrentTitle(latest.title);
-    setinit(false);
   } else {
     window.alert('DVideo contract not deployed to detected network.')
   }
@@ -74,8 +73,9 @@ function App() {
 
   useEffect(() => {
     async function fetchData() {
+      setinit(true)
       // await loadWeb3();
-      // await loadBlockchainData(setAccount, setVideoContract, setUserContract, setVideoCount, setVideos, videos, setCurrentHash, setCurrentTitle, setinit);
+      // await loadBlockchainData(setAccount, setVideoContract, setUserContract, setVideoCount, setVideos, videos, setCurrentHash, setCurrentTitle);
       setinit(false)
     }
     fetchData();
