@@ -8,7 +8,7 @@ function SearchBar() {
 
     return (
         <React.Fragment>
-            <div >
+            <div className="col-6">
                 <input
                     type='text'
                     value={searchString}

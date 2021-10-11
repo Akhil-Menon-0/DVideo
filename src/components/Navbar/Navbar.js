@@ -7,20 +7,21 @@ function Navbar() {
 
     const { user, setUser } = useContext(Context)
     return (
-        <React.Fragment>
-            <div style={{ backgroundColor: "blue" }}>
-                <Link to="/" exact="true" strict="true"><h2>Home</h2></Link>
+        <div className="container">
+            <div className="row" style={{ backgroundColor: "blue" }}>
+                <div className="col-2"><Link to="/" exact="true" strict="true"><h2>Home</h2></Link></div>
                 <SearchBar />
                 {user === null ?
-                    <React.Fragment>
+                    <div className="col-4">
                         <button onClick={() => { setUser("User") }}>Login</button>
-                    </React.Fragment> :
-                    <React.Fragment>
-                        <Link to='/upload' exact="true" strict="true">Upload</Link>
+                        <Link to="/signup" exact="true" strict="true"><button>Signup</button></Link>
+                    </div> :
+                    <div className="col-4">
+                        <Link to='/upload' exact="true" strict="true"><button>Upload</button></Link>
                         <button onClick={() => { setUser(null) }}>Logout</button>
-                    </React.Fragment>}
+                    </div>}
             </div>
-        </React.Fragment>
+        </div>
     )
 }
 
