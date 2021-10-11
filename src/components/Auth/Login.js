@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect, useContext } from 'react'
 
 function Login() {
+
     return (
         <h1>Login</h1>
     )

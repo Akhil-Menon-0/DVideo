@@ -17,6 +17,8 @@ import Navbar from './Navbar/Navbar'
 import SearchResults from './SearchResults/SearchResults'
 import PrivateProfilePlaylist from './Profile/PrivateProfilePlaylist'
 import InvalidPage from './Error404/InvalidPage'
+import PublicRoute from './Routes/PublicRoute'
+import PrivateRoute from './Routes/PrivateRoute'
 
 async function loadWeb3() {
   if (window.ethereum) {
@@ -91,39 +93,17 @@ function App() {
     <React.Fragment>
       <Navbar />
       <Switch>
-        <Route path="/" exact={true} strict={true} render={() => {
-          return <Home />
-        }} />
-        <Route path="/login" exact={true} strict={true} render={() => {
-          return <Login />
-        }} />
-        <Route path="/signup" exact={true} strict={true} render={() => {
-          return <Signup />
-        }} />
-        <Route path="/profile" exact={true} strict={true} render={() => {
-          return <PrivateProfile />
-        }} />
-        <Route path="/publicProfile/:userId" exact={true} strict={true} render={(url) => {
-          return <PublicProfile userId={url.match.params.userId} />
-        }} />
-        <Route path="/upload" exact={true} strict={true} render={() => {
-          return <UploadOption />
-        }} />
-        <Route path="/upload/:option" exact={true} strict={true} render={(url) => {
-          return <UploadForm uploadOption={url.match.params.option} />
-        }} />
-        <Route path="/video/:videoId" exact={true} strict={true} render={(url) => {
-          return <ViewVideo videoId={url.match.params.videoId} />
-        }} />
-        <Route path="/search/:searchString" exact={true} strict={true} render={(url) => {
-          return <SearchResults searchString={url.match.params.searchString} />
-        }} />
-        <Route path="/playlist/:playlistName" exact={true} strict={true} render={(url) => {
-          return <PrivateProfilePlaylist playlistName={url.match.params.playlistName} />
-        }} />
-        <Route render={() => {
-          return <InvalidPage />
-        }} />
+        <PublicRoute restricted={false} component={Home} path="/" exact={true} strict={true} />
+        <PublicRoute restricted={true} component={Login} path="/login" exact={true} strict={true} />
+        <PublicRoute restricted={true} component={Signup} path="/signup" exact={true} strict={true} />
+        <PrivateRoute component={PrivateProfile} path="/profile" exact={true} strict={true} />
+        <PublicRoute restricted={false} component={PublicProfile} path="/publicProfile/:userId" exact={true} strict={true} />
+        <PrivateRoute component={UploadOption} path="/upload" exact={true} strict={true} />
+        <PrivateRoute component={UploadForm} path="/upload/:uploadOption" exact={true} strict={true} />
+        <PublicRoute restricted={false} component={ViewVideo} path="/video/:videoId" exact={true} strict={true} />
+        <PublicRoute restricted={false} component={SearchResults} path="/search/:searchString" exact={true} strict={true} />
+        <PrivateRoute component={PrivateProfilePlaylist} path="/playlist/:playlistName" exact={true} strict={true} />
+        <PublicRoute restricted={false} component={InvalidPage} />
       </Switch >
     </React.Fragment>
   )

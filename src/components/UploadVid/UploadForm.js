@@ -1,6 +1,7 @@
 import React from 'react'
 
 function UploadForm(props) {
+    console.log(props)
     if (props.uploadOption === "IPFS_Only") {
         return (
             <h1>IPFS only form</h1>

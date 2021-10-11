@@ -22,7 +22,7 @@ function SearchBar() {
                     <button
                         className="btn btn-outline-danger"
                         disabled={searchString === "" ? true : false}
-                        ref={node => { console.log(node); searchButton = node }}
+                        ref={node => { searchButton = node }}
                     >
                         Search
                     </button>

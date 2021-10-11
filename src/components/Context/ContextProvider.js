@@ -5,6 +5,7 @@ const ContextProvider = ({ children }) => {
     const [account, setAccount] = useState(null);
     const [videoContract, setVideoContract] = useState(null);
     const [userContract, setUserContract] = useState(null);
+    const [user, setUser] = useState(null)
 
     const contextObject = {
         account,
@@ -12,7 +13,9 @@ const ContextProvider = ({ children }) => {
         videoContract,
         setVideoContract,
         userContract,
-        setUserContract
+        setUserContract,
+        user,
+        setUser
     }
     return (
         <Context.Provider value={contextObject}>
