@@ -11,8 +11,10 @@ function SearchBar() {
             <div >
                 <input
                     type='text'
+                    value={searchString}
                     onKeyPress={(e) => {
                         if (e.key === 'Enter') {
+                            setSearchString("")
                             searchButton.click()
                         }
                     }}
@@ -20,6 +22,7 @@ function SearchBar() {
                 />
                 <Link to={`/search/${searchString}`} exact="true" strict="true">
                     <button
+                        onClick={() => { setSearchString("") }}
                         className="btn btn-outline-danger"
                         disabled={searchString === "" ? true : false}
                         ref={node => { searchButton = node }}
