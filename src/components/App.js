@@ -16,6 +16,7 @@ import ViewVideo from './ViewVideo/ViewVideo'
 import Navbar from './Navbar/Navbar'
 import SearchResults from './SearchResults/SearchResults'
 import PrivateProfilePlaylist from './Profile/PrivateProfilePlaylist'
+import AllTransactions from './Transactions/AllTransactions';
 import InvalidPage from './Error404/InvalidPage'
 import PublicRoute from './Routes/PublicRoute'
 import PrivateRoute from './Routes/PrivateRoute'
@@ -81,7 +82,7 @@ function App() {
       setinit(true)
       // await loadWeb3();
       // await loadBlockchainData(setAccount, setVideoContract, setUserContract, setVideoCount, setVideos, videos, setCurrentHash, setCurrentTitle);
-      await getUserFromLocalStorage(account, setUser, setTransactions)
+      // await getUserFromLocalStorage(account, setUser, setTransactions)
       setinit(false)
     }
     fetchData();
@@ -107,6 +108,7 @@ function App() {
         <PublicRoute restricted={false} component={ViewVideo} path="/video/:videoId" exact={true} strict={true} />
         <PublicRoute restricted={false} component={SearchResults} path="/search/:searchString" exact={true} strict={true} />
         <PrivateRoute component={PrivateProfilePlaylist} path="/playlist/:playlistName" exact={true} strict={true} />
+        <PrivateRoute component={AllTransactions} path="/profile/transactions" exact={true} strict={true} />
         <PublicRoute restricted={false} component={InvalidPage} />
       </Switch >
     </React.Fragment>

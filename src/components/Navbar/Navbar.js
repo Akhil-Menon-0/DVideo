@@ -5,11 +5,11 @@ import { Link } from 'react-router-dom'
 
 function Navbar() {
 
-    const { user, setUser } = useContext(Context)
+    const { user, setUser, setTransactions } = useContext(Context)
     return (
         <div className="container">
-            <Link to="/video/771">view</Link>&nbsp;
-            <Link to="/profile">my</Link>
+            <Link to="/video/771">view video</Link>&nbsp;
+            <Link to="/profile">my profile</Link>
             <div className="row" style={{ backgroundColor: "blue" }}>
                 <div className="col-2"><Link to="/" exact="true" strict="true"><h2>Home</h2></Link></div>
                 <SearchBar />
@@ -22,9 +22,11 @@ function Navbar() {
                         <Link to='/upload' exact="true" strict="true"><button>Upload</button></Link>
                         <button onClick={() => {
                             setUser(null)
+                            setTransactions([])
                             //delete session from local storage
-                            window.localStorage.removeItem(user)
+                            // window.localStorage.removeItem(user)
                         }}>Logout</button>
+                        <Link to="/profile/transactions" exact="true" strict="true"><button>Transactions</button></Link>
                     </div>}
             </div>
         </div>

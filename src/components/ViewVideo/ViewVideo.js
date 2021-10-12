@@ -66,7 +66,7 @@ function ViewVideo(props) {
                     saveTransaction(account, setTransactions, newTransaction)
                 }}
                 ref={(node) => { commentButton = node }}
-                disabled={user === null ? true : false}
+                disabled={comment === "" || user === null ? true : false}
             >Comment</button>
             <button onClick={() => { console.log(transactions); }}> show</button>
         </div >
