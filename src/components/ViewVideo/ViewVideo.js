@@ -3,7 +3,7 @@ import Context from '../Context/Context'
 
 function ViewVideo(props) {
 
-    const { user, transactions, setTransactions, saveTransaction } = useContext(Context)
+    const { account, user, transactions, setTransactions, saveTransaction } = useContext(Context)
     const [comment, setComment] = useState("")
     let commentButton = null
 
@@ -18,7 +18,7 @@ function ViewVideo(props) {
                 timestamp: now,
                 params: [props.videoId]
             }
-            saveTransaction(setTransactions, newTransaction)
+            saveTransaction(account, setTransactions, newTransaction)
         }
     }, [])
 
@@ -33,7 +33,7 @@ function ViewVideo(props) {
                     timestamp: now,
                     params: [props.videoId]
                 }
-                saveTransaction(setTransactions, newTransaction)
+                saveTransaction(account, setTransactions, newTransaction)
             }}>Like</button>
             <button disabled={user === null ? true : false} onClick={() => {
                 let now = new Date();
@@ -43,7 +43,7 @@ function ViewVideo(props) {
                     timestamp: now,
                     params: ["subscribedUserId"]
                 }
-                saveTransaction(setTransactions, newTransaction)
+                saveTransaction(account, setTransactions, newTransaction)
             }}>Subscribe</button>
             <br />
             <input
@@ -63,7 +63,7 @@ function ViewVideo(props) {
                         params: [props.videoId, comment]
                     }
                     setComment("")
-                    saveTransaction(setTransactions, newTransaction)
+                    saveTransaction(account, setTransactions, newTransaction)
                 }}
                 ref={(node) => { commentButton = node }}
                 disabled={user === null ? true : false}

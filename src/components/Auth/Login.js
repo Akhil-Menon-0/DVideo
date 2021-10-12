@@ -4,7 +4,7 @@ import Context from '../Context/Context'
 function Login() {
 
     const { setUser } = useContext(Context)
-    const [userName, setUserName] = useState("")
+    const [publicKey, setPublicKey] = useState("")
 
     return (
         <div>
@@ -12,13 +12,21 @@ function Login() {
             <input
                 type="text"
                 placeholder="Public Key"
-                value={userName}
-                onChange={(e) => { setUserName(e.target.value) }}
+                value={publicKey}
+                onChange={(e) => { setPublicKey(e.target.value) }}
             />
             <button onClick={() => {
-                setUser(userName)
+                let now = new Date()
+                setUser(publicKey)
                 //save in local storage
-            }} disabled={userName === "" ? true : false}>Login</button>
+                let userSession = {
+                    userName: "Fetch from contract",
+                    publicKey: publicKey,
+                    timestamp: now,
+                    transactions: []
+                }
+                window.localStorage.setItem(publicKey, JSON.stringify(userSession))
+            }} disabled={publicKey === "" ? true : false}>Login</button>
         </div>
     )
 }

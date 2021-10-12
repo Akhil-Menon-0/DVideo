@@ -8,7 +8,8 @@ function Navbar() {
     const { user, setUser } = useContext(Context)
     return (
         <div className="container">
-            <Link to="/video/771">view</Link>
+            <Link to="/video/771">view</Link>&nbsp;
+            <Link to="/profile">my</Link>
             <div className="row" style={{ backgroundColor: "blue" }}>
                 <div className="col-2"><Link to="/" exact="true" strict="true"><h2>Home</h2></Link></div>
                 <SearchBar />
@@ -21,7 +22,8 @@ function Navbar() {
                         <Link to='/upload' exact="true" strict="true"><button>Upload</button></Link>
                         <button onClick={() => {
                             setUser(null)
-                            //delete session from local storage 
+                            //delete session from local storage
+                            window.localStorage.removeItem(user)
                         }}>Logout</button>
                     </div>}
             </div>

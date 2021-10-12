@@ -1,8 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
+import Context from './Context/Context';
 import DVideo from '../abis/DVideo.json'
 import Web3 from 'web3';
 import './App.css';
-import { Route } from "react-router-dom";
 import { Switch } from "react-router-dom";
 
 import Home from './Home/Home'
@@ -63,21 +63,25 @@ async function loadBlockchainData(setAccount, setVideoContract, setUserContract,
   }
 }
 
-
-
-
-
-
+async function getUserFromLocalStorage(account, setUser, setTransactions) {
+  let userSession = JSON.parse(window.localStorage.getItem(account))
+  if (userSession !== null) {
+    setUser(userSession.publicKey) //create user of context from userSession
+    setTransactions(userSession.transactions)
+  }
+}
 
 function App() {
 
   const [init, setinit] = useState(true)
+  const { account, setUser, setTransactions } = useContext(Context)
 
   useEffect(() => {
     async function fetchData() {
       setinit(true)
       // await loadWeb3();
       // await loadBlockchainData(setAccount, setVideoContract, setUserContract, setVideoCount, setVideos, videos, setCurrentHash, setCurrentTitle);
+      await getUserFromLocalStorage(account, setUser, setTransactions)
       setinit(false)
     }
     fetchData();
