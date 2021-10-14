@@ -5,9 +5,9 @@ contract Primary {
     uint256 public usersCount = 0;
     string public name = "Primary";
     mapping(uint256 => Video) public Id_Video;
-    mapping(string => Video[]) public Tags_Videos;
-    mapping(string => Video) public Title_Video;
-    mapping(string => Video) public User_Videos;
+    uint256[10][] public Tags_Videos; //10 is number of tags 
+    mapping(string => uint256) public Title_Video;
+    mapping(string => uint256[]) public User_Videos;
     mapping(string => User) public PublicKey_User;
 
     struct Video {
@@ -19,7 +19,7 @@ contract Primary {
         string[] comments;
         uint256 views;
         uint256 hearts;
-        string tags;
+        uint256 tags;
         string creatorId;
     }
 
@@ -72,7 +72,8 @@ contract Primary {
                 subscribe(_userId[transaction],_params[transaction][0])
             }
             else if(keccak256(abi.encodePacked(_type[transaction]))==abi.encodePacked("upload")){
-                uploadVideo(_params[transaction]][3], _params[transaction]][0], _timestamp[transaction], _params[transaction]][1], _params[transaction][2], _userId[transaction]);
+                uint256 tags = _params[transaction][2];
+                uploadVideo(_params[transaction]][3], _params[transaction]][0], _timestamp[transaction], _params[transaction]][1], tags, _userId[transaction]);
             }
         }
     }
@@ -96,7 +97,7 @@ contract Primary {
         PublicKey_User[_subscribedUserId].subscribersCount++;
     }
 
-    function uploadVideo(string memory _hash, string memory _title, string memory _time, string memory _description, string _tags, string _creatorId) public {
+    function uploadVideo(string memory _hash, string memory _title, string memory _time, string memory _description, uint256 _tags, string _creatorId) public {
         videoCount++;
         string[] comments;
         Id_Video[videoCount]=Video(
@@ -111,5 +112,24 @@ contract Primary {
             _tags,
             _creatorId
         )
+        Title_Video[_title]=videoCount;
+        User_Videos[_creatorId].push(videoCount)
+        for(uint256 i=0;i<10;i++){  //10 is number of tags
+            if((_tags>>i)&1 != 0){
+                Tags_Videos[i].push(videoCount);
+            }
+        }   
     }
+
+    function stringToUint(string s) constant returns (uint) {
+    bytes memory b = bytes(s);
+    uint result = 0;
+    for (uint i = 0; i < b.length; i++) { 
+        if (b[i] >= 48 && b[i] <= 57) {
+            result = result * 10 + (uint(b[i]) - 48); 
+        }
+    }
+    return result; 
+}
+    
 }
