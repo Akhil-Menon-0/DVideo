@@ -1,6 +1,6 @@
 import React, { useContext,useState } from 'react'
 import Context from '../Context/Context'
-
+import axios from 'axios'
 
 //Declare IPFS
 const ipfsClient = require('ipfs-http-client')
@@ -26,7 +26,7 @@ function UploadIPFS(props) {
       const[description,setDescription]=useState("")
       const [tags,setTags] = useState("0")
       const [videoHash,setVideoHash] = useState("")
-      const [upload,setUpload]=useState(false)
+      const [preview,setPreview]=useState(false)
       const selectShortlistedApplicant = (e) => {
         const checked = e.target.checked;
         const k=parseInt(e.target.name)
@@ -57,26 +57,46 @@ function UploadIPFS(props) {
               <h5><b>Upload Video</b></h5>
               <form onSubmit={(event) => {
                 event.preventDefault()
-                console.log("Submitting")
-                setUpload(true)
+                if(parseInt(tags)===0){
+                  alert("Please select atleast one tag!")
+                  return
+                }
+                axios.get(`https://ipfs.infura.io/ipfs/${videoHash}`)
+                  .then(function (response) {
+                    console.log(response);
+                    console.log("Submitting")
+                setPreview(true)
                 let now = new Date()
                 let newTransaction = {
                 type: "upload",
                 userId: user,
                 timestamp: now,
-                params: [videoTitle,description,tags]
+                params: [videoTitle,description,tags,videoHash]
                 }
                 saveTransaction(account, setTransactions, newTransaction)
                 setVideoHash("")
                 setVideoTitle("")
+                setPreview(false)
+                setVideoTitle("")
                 setDescription("")
                 setTags("0")
                 window.location.reload()
+                  })
+                  .catch(function (error) {
+
+                    console.log(error);
+                    setPreview(false)
+                      alert("Wrong hash")
+                  })
+                
+                
+                
               }} >
                 &nbsp;
                 <div className="form-group mr-sm-2">
                 <label>IPFS Hash</label>
-                <input type='text' style={{ width: '250px' }} value={videoHash} onChange={(e) => { setVideoHash(e.target.value) }} placeholder="Enter the IPFS hash"/>
+                <input type='text' maxLength='50' style={{ width: '250px' }} value={videoHash} onChange={(e) => { setVideoHash(e.target.value)
+                setPreview(false) }} placeholder="Enter the IPFS hash"/>
                 <label style={{padding:'10px'}}>Title </label>
                   <input
                     id="videoTitle"
@@ -84,9 +104,10 @@ function UploadIPFS(props) {
                     ref={(input) => { setVideoTitle(input) }}
                     className="form-control-sm"
                     placeholder="Enter the title"
+                    maxLength="500"
                     required />
                 <label>Description</label>
-                <input type='text' style={{ width: '250px' }} value={description} onChange={(e) => { setDescription(e.target.value) }} placeholder="Enter the Description"/>
+                <input type='text' style={{ width: '250px' }} maxLength="5000" value={description} onChange={(e) => { setDescription(e.target.value) }} placeholder="Enter the Description" required/>
                 <br/><label>Tags</label>
                 <div className="check">
                 <label>
@@ -107,19 +128,36 @@ function UploadIPFS(props) {
                 </label>
                 </div>
                 </div>
+                <button type="button" className="btn btn-danger btn-block btn-sm" onClick={()=>{
+                  axios.get(`https://ipfs.infura.io/ipfs/${videoHash}`)
+                  .then(function (response) {
+                    console.log(response);
+                    setPreview(true)
+                  })
+                  .catch(function (error) {
 
+                    console.log(error);
+                    setPreview(false)
+                      alert("Wrong hash")
+                  })
+                  
+                }}>Preview video</button>
+
+                {preview===true&&(
+                    <video
+                      src={`https://ipfs.infura.io/ipfs/${videoHash}`}
+                      style={{ width: '150px' }}
+                      controls
+                    >
+                      Kuch to gadbad hai daya
+                    </video>
+                )}
+                
+              <br/>
                 <button type="submit" className="btn btn-danger btn-block btn-sm">Upload!</button>
                 &nbsp;
               </form>
-              {upload===true&&(
-                <video
-                  src={`https://ipfs.infura.io/ipfs/${videoHash}`}
-                  controls
-                >
-                </video>
-              )
-                
-              }
+              
               
               
             </div>
