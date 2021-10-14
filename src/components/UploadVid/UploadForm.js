@@ -1,13 +1,12 @@
-import React ,{useState} from 'react'
+import React, { useState } from 'react'
 import UploadIPFS from './UploadIPFS'
 import UploadScratch from './UploadScratch'
 import UploadInvalid from './UploadInvalid'
 function UploadForm(props) {
     console.log(props)
-    const [buffer, setBuffer] = useState(null);
     if (props.uploadOption === "IPFS_Only") {
         return (
-            <UploadIPFS/>
+            <UploadIPFS />
         )
     }
     else if (props.uploadOption === "Scratch")
@@ -16,7 +15,7 @@ function UploadForm(props) {
         )
     else {
         return (
-            <UploadInvalid/>
+            <UploadInvalid />
         )
     }
 }
