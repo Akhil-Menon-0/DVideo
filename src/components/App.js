@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import Context from './Context/Context';
-import DVideo from '../abis/DVideo.json'
+import DVideo from '../abis/Primary.json'
 import Web3 from 'web3';
 import './App.css';
 import { Switch } from "react-router-dom";
@@ -34,7 +34,7 @@ async function loadWeb3() {
   }
 }
 
-async function loadBlockchainData(setAccount, setVideoContract, setUserContract, setVideoCount, setVideos, videos, setCurrentHash, setCurrentTitle) {
+async function loadBlockchainData(setAccount, setContract) {
   const web3 = window.web3
   // Load account
   const accounts = await web3.eth.getAccounts()
@@ -44,21 +44,22 @@ async function loadBlockchainData(setAccount, setVideoContract, setUserContract,
   const networkData = DVideo.networks[networkId]
   if (networkData) {
     const dvideo = new web3.eth.Contract(DVideo.abi, networkData.address)
-    setVideoContract(dvideo)  //saving video contract in context
-    const videosCount = await dvideo.methods.videoCount().call()
-    setVideoCount(videosCount)
+    console.log(dvideo);
+    setContract(dvideo)  //saving video contract in context
+    // const videosCount = await dvideo.methods.videoCount().call()
+    // setVideoCount(videosCount)
 
-    // Load videos, sort by newest
-    for (var i = videosCount; i >= 1; i--) {
-      const video = await dvideo.methods.videos(i).call()
-      videos.push(video)
-      setVideos(videos)
-    }
+    // // Load videos, sort by newest
+    // for (var i = videosCount; i >= 1; i--) {
+    //   const video = await dvideo.methods.videos(i).call()
+    //   videos.push(video)
+    //   setVideos(videos)
+    // }
 
-    //Set latest video with title to view as default 
-    const latest = await dvideo.methods.videos(videosCount).call()
-    setCurrentHash(latest.hash);
-    setCurrentTitle(latest.title);
+    // //Set latest video with title to view as default 
+    // const latest = await dvideo.methods.videos(videosCount).call()
+    // setCurrentHash(latest.hash);
+    // setCurrentTitle(latest.title);
   } else {
     window.alert('DVideo contract not deployed to detected network.')
   }
@@ -75,13 +76,13 @@ async function getUserFromLocalStorage(account, setUser, setTransactions) {
 function App() {
 
   const [init, setinit] = useState(true)
-  const { account, setUser, setTransactions } = useContext(Context)
+  const { account, setUser, setTransactions, contract, setContract, setAccount } = useContext(Context)
 
   useEffect(() => {
     async function fetchData() {
       setinit(true)
-      // await loadWeb3();
-      // await loadBlockchainData(setAccount, setVideoContract, setUserContract, setVideoCount, setVideos, videos, setCurrentHash, setCurrentTitle);
+      await loadWeb3();
+      await loadBlockchainData(setAccount, setContract);
       // await getUserFromLocalStorage(account, setUser, setTransactions)
       setinit(false)
     }

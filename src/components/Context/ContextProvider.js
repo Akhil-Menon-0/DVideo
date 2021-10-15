@@ -4,8 +4,7 @@ import Context from './Context'
 
 const ContextProvider = ({ children }) => {
     const [account, setAccount] = useState(null);
-    const [videoContract, setVideoContract] = useState(null);
-    const [userContract, setUserContract] = useState(null);
+    const [contract, setContract] = useState(null);
     const [user, setUser] = useState(null)
     const [transactions, setTransactions] = useState([])
 
@@ -34,10 +33,8 @@ const ContextProvider = ({ children }) => {
     const contextObject = {
         account,
         setAccount,
-        videoContract,
-        setVideoContract,
-        userContract,
-        setUserContract,
+        contract,
+        setContract,
         user,
         setUser,
         transactions,
