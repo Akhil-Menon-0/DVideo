@@ -1,11 +1,14 @@
 pragma solidity ^0.5.16;
+pragma experimental ABIEncoderV2;
 
 contract Primary {
     uint256 public videoCount = 0;
     uint256 public usersCount = 0;
     string public name = "Primary";
     mapping(uint256 => Video) public Id_Video;
-    uint256[10][] public Tags_Videos; //10 is number of tags 
+    uint256[] public Tag1_Videos;
+    uint256[] public Tag2_Videos;
+    uint256[] public Tag3_Videos;
     mapping(string => uint256) public Title_Video;
     mapping(string => uint256[]) public User_Videos;
     mapping(string => User) public PublicKey_User;
@@ -28,7 +31,7 @@ contract Primary {
         string userName;
         string[] subscriptions;
         uint256 subscribersCount;
-        mapping(string => Video[]) Playlist_Videos;
+        mapping(string => uint256[]) Playlist_Videos;
     }
 
     event VideoUploaded(uint256 id, string hash, string title, address author);
@@ -37,14 +40,12 @@ contract Primary {
 
     function signup(string memory _userName, string memory _publicKey) public {
         usersCount++;
-        string[] subscriptions = [];
-        mapping(string => Video[]) Playlist_Videos;
+        string[] memory subscriptions;
         PublicKey_User[_publicKey] = User(
             _publicKey,
             _userName,
             subscriptions,
-            0,
-            Playlist_Videos
+            0
         );
     }
 
@@ -53,54 +54,89 @@ contract Primary {
         string[] memory _userId,
         string[] memory _timestamp,
         string[][] memory _params
-    ) {
+    ) public {
         for (
             uint256 transaction = 0;
             transaction < _type.length;
             transaction++
         ) {
-            if(keccak256(abi.encodePacked(_type[transaction]))==abi.encodePacked("view")){
-                view(_userId[transaction],_params[transaction][0]);
-            }
-            else if(keccak256(abi.encodePacked(_type[transaction]))==abi.encodePacked("like")){
-                like(_userId[transaction],_params[transaction][0]);
-            }
-            else if(keccak256(abi.encodePacked(_type[transaction]))==abi.encodePacked("comment")){
-                comment(_userId[transaction],_params[transaction][0],_params[transaction][1]);
-            }
-            else if(keccak256(abi.encodePacked(_type[transaction]))==abi.encodePacked("subscribe")){
-                subscribe(_userId[transaction],_params[transaction][0])
-            }
-            else if(keccak256(abi.encodePacked(_type[transaction]))==abi.encodePacked("upload")){
-                uint256 tags = _params[transaction][2];
-                uploadVideo(_params[transaction]][3], _params[transaction]][0], _timestamp[transaction], _params[transaction]][1], tags, _userId[transaction]);
+            if (
+                keccak256(abi.encodePacked(_type[transaction])) ==
+                keccak256(abi.encodePacked("view"))
+            ) {
+                watch(
+                    _userId[transaction],
+                    stringToUint(_params[transaction][0])
+                );
+            } else if (
+                keccak256(abi.encodePacked(_type[transaction])) ==
+                keccak256(abi.encodePacked("like"))
+            ) {
+                like(
+                    _userId[transaction],
+                    stringToUint(_params[transaction][0])
+                );
+            } else if (
+                keccak256(abi.encodePacked(_type[transaction])) ==
+                keccak256(abi.encodePacked("comment"))
+            ) {
+                comment(
+                    stringToUint(_params[transaction][0]),
+                    _params[transaction][1]
+                );
+            } else if (
+                keccak256(abi.encodePacked(_type[transaction])) ==
+                keccak256(abi.encodePacked("subscribe"))
+            ) {
+                subscribe(_userId[transaction], _params[transaction][0]);
+            } else if (
+                keccak256(abi.encodePacked(_type[transaction])) ==
+                keccak256(abi.encodePacked("upload"))
+            ) {
+                uploadVideo(
+                    _params[transaction][3],
+                    _params[transaction][0],
+                    _timestamp[transaction],
+                    _params[transaction][1],
+                    stringToUint(_params[transaction][2]),
+                    _userId[transaction]
+                );
             }
         }
     }
 
-    function view(string memory _userId, string memory _videoId) public {
+    function watch(string memory _userId, uint256 _videoId) public {
         Id_Video[_videoId].views++;
         PublicKey_User[_userId].Playlist_Videos["viewed"].push(_videoId);
     }
 
-    function like(string memory _userId, string memory _videoId) public {
+    function like(string memory _userId, uint256 _videoId) public {
         Id_Video[_videoId].hearts++;
         PublicKey_User[_userId].Playlist_Videos["liked"].push(_videoId);
     }
 
-    function comment(string memory _userId, string memory _videoId, string memory _comment) public {
+    function comment(uint256 _videoId, string memory _comment) public {
         Id_Video[_videoId].comments.push(_comment);
     }
 
-    function subscribe(string memory _userId, string memory _subscribedUserId){
+    function subscribe(string memory _userId, string memory _subscribedUserId)
+        public
+    {
         PublicKey_User[_userId].subscriptions.push(_subscribedUserId);
         PublicKey_User[_subscribedUserId].subscribersCount++;
     }
 
-    function uploadVideo(string memory _hash, string memory _title, string memory _time, string memory _description, uint256 _tags, string _creatorId) public {
+    function uploadVideo(
+        string memory _hash,
+        string memory _title,
+        string memory _time,
+        string memory _description,
+        uint256 _tags,
+        string memory _creatorId
+    ) public {
         videoCount++;
-        string[] comments;
-        Id_Video[videoCount]=Video(
+        string[] memory comments;
+        Id_Video[videoCount] = Video(
             videoCount,
             _hash,
             _title,
@@ -111,25 +147,33 @@ contract Primary {
             0,
             _tags,
             _creatorId
-        )
-        Title_Video[_title]=videoCount;
-        User_Videos[_creatorId].push(videoCount)
-        for(uint256 i=0;i<10;i++){  //10 is number of tags
-            if((_tags>>i)&1 != 0){
-                Tags_Videos[i].push(videoCount);
-            }
-        }   
-    }
-
-    function stringToUint(string s) constant returns (uint) {
-    bytes memory b = bytes(s);
-    uint result = 0;
-    for (uint i = 0; i < b.length; i++) { 
-        if (b[i] >= 48 && b[i] <= 57) {
-            result = result * 10 + (uint(b[i]) - 48); 
+        );
+        Title_Video[_title] = videoCount;
+        User_Videos[_creatorId].push(videoCount);
+        if ((_tags & 1) != 0) {
+            Tag1_Videos.push(videoCount);
+        }
+        if ((_tags >> 1) & 1 != 0) {
+            Tag2_Videos.push(videoCount);
+        }
+        if ((_tags >> 2) & 1 != 0) {
+            Tag3_Videos.push(videoCount);
         }
     }
-    return result; 
-}
-    
+
+    function stringToUint(string memory s)
+        public
+        view
+        returns (uint256 result)
+    {
+        bytes memory b = bytes(s);
+        uint256 i;
+        result = 0;
+        for (i = 0; i < b.length; i++) {
+            uint256 c = uint256(uint8(b[i]));
+            if (c >= 48 && c <= 57) {
+                result = result * 10 + (c - 48);
+            }
+        }
+    }
 }
