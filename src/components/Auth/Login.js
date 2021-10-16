@@ -61,7 +61,8 @@ function Login() {
                     .then(async (res) => {
                         if (res === false) { setWrongUserName(true); throw new Error(); }
                         let user = await contract.methods.PublicKey_User(publicKey).call();
-                        //console.log(await user.subscriptions(0).call())
+                        console.log(user)
+                        //console.log(await contract.methods.getUserSubscriptions(account).call())
                         let now = new Date()
                         //save in local storage
                         let userSession = {

@@ -37,6 +37,30 @@ contract Primary {
 
     constructor() public {}
 
+    function getUserSubscriptions(string memory _publicKey)
+        public
+        view
+        returns (string[] memory)
+    {
+        return PublicKey_User[_publicKey].subscriptions;
+    }
+
+    function getUserPlaylist(string memory _publicKey, string memory _playlist)
+        public
+        view
+        returns (uint256[] memory)
+    {
+        return PublicKey_User[_publicKey].Playlist_Videos[_playlist];
+    }
+
+    function getVideoComments(uint256 _videoId)
+        public
+        view
+        returns (string[] memory)
+    {
+        return Id_Video[_videoId].comments;
+    }
+
     function signup(string memory _userName, string memory _publicKey) public {
         usersCount++;
         string[] memory subscriptions;
@@ -46,9 +70,6 @@ contract Primary {
             subscriptions,
             0
         );
-        PublicKey_User[_publicKey].subscriptions.push("");
-        PublicKey_User[_publicKey].Playlist_Videos["viewed"].push(0);
-        PublicKey_User[_publicKey].Playlist_Videos["liked"].push(0);
         UserName_User[_userName] = _publicKey;
     }
 
@@ -151,7 +172,6 @@ contract Primary {
             _tags,
             _creatorId
         );
-        Id_Video[videoCount].comments.push("");
         Title_Video[_title] = videoCount;
         User_Videos[_creatorId].push(videoCount);
         if ((_tags & 1) != 0) {
@@ -165,7 +185,11 @@ contract Primary {
         }
     }
 
-    function stringToUint(string memory s) public returns (uint256 result) {
+    function stringToUint(string memory s)
+        public
+        pure
+        returns (uint256 result)
+    {
         bytes memory b = bytes(s);
         uint256 i;
         result = 0;
