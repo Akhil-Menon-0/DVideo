@@ -27,13 +27,12 @@ const uploadVideo = async (setinit, buffer) => {
   await ipfs.add(buffer)
     .then((result) => {
       console.log('IPFS result', result)
-      console.log(result[0].hash)
       hash = result[0].hash
     })
     .catch((error) => {
-      console.log(error)
+      throw new Error()
     })
-  return hash
+  return hash;
 }
 function UploadScratch(props) {
   const {
@@ -44,7 +43,7 @@ function UploadScratch(props) {
     saveTransaction
   } = useContext(Context)
 
-  let videoHash = ""
+  const [ipfsUploadMsg, setIpfsUploadMsg] = useState("")
   const [videoTitle, setVideoTitle] = useState("")
   const [description, setDescription] = useState("")
   const [buffer, setBuffer] = useState(null)
@@ -79,7 +78,7 @@ function UploadScratch(props) {
       <div className="row">
         <div className="col-md-3 border border-danger overflow-auto text-center" style={{ maxHeight: '768px', minWidth: '175px', margin: '10px' }}>
           <h5><b>Upload Video</b></h5>
-          <form onSubmit={async (event) => {
+          <form onSubmit={(event) => {
             event.preventDefault()
 
             if (parseInt(tags) === 0) {
@@ -90,20 +89,23 @@ function UploadScratch(props) {
             console.log(tags)
             setUpload(true)
 
-            await uploadVideo(setinit, buffer)
-              .then((result) => { videoHash = result })
-            let now = new Date()
-            let newTransaction = {
-              type: "upload",
-              userId: user,
-              timestamp: now,
-              params: [videoTitle, description, tags, videoHash]
-            }
-            saveTransaction(account, setTransactions, newTransaction)
-            setVideoTitle("")
-            setDescription("")
-            setTags("0")
-
+            uploadVideo(setinit, buffer)
+              .then((result) => {
+                let now = new Date()
+                let newTransaction = {
+                  type: "upload",
+                  userId: user,
+                  timestamp: now,
+                  params: [videoTitle, description, tags, result]
+                }
+                saveTransaction(account, setTransactions, newTransaction)
+                setVideoTitle("")
+                setDescription("")
+                setTags("0")
+              })
+              .catch((err) => {
+                setIpfsUploadMsg("Error uploading video to IPFS")
+              })
           }} >
             &nbsp;
             <input id="upload-file" onChange={(event) => {
@@ -152,7 +154,7 @@ function UploadScratch(props) {
             <button type="submit" className="btn btn-danger btn-block btn-sm" >Upload!</button>
             &nbsp;
           </form>
-
+          {ipfsUploadMsg === "" ? null : <div className="alert alert-danger">{ipfsUploadMsg}</div>}
         </div>
       </div>
     </div >
