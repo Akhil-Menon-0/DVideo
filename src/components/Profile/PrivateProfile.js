@@ -6,7 +6,7 @@ function PrivateProfile() {
     const { user } = useContext(Context)
 
     return (
-        <h1>Private profile of, fetch {user} from context</h1>
+        <h1>Private profile of, fetch {user.userName} from context</h1>
     )
 }
 

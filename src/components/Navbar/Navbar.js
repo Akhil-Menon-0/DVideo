@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 function Navbar() {
 
-    const { user, setUser, setTransactions } = useContext(Context)
+    const { account, user, setUser, setTransactions } = useContext(Context)
     return (
         <div className="container">
             <Link to="/video/771">view video</Link>&nbsp;
@@ -24,7 +24,7 @@ function Navbar() {
                             setUser(null)
                             setTransactions([])
                             //delete session from local storage
-                            // window.localStorage.removeItem(user)
+                            window.localStorage.removeItem(account)
                         }}>Logout</button>
                         <Link to="/profile/transactions" exact="true" strict="true"><button>Transactions</button></Link>
                     </div>}

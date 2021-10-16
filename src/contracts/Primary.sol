@@ -46,6 +46,9 @@ contract Primary {
             subscriptions,
             0
         );
+        PublicKey_User[_publicKey].subscriptions.push("");
+        PublicKey_User[_publicKey].Playlist_Videos["viewed"].push(0);
+        PublicKey_User[_publicKey].Playlist_Videos["liked"].push(0);
         UserName_User[_userName] = _publicKey;
     }
 
@@ -148,6 +151,7 @@ contract Primary {
             _tags,
             _creatorId
         );
+        Id_Video[videoCount].comments.push("");
         Title_Video[_title] = videoCount;
         User_Videos[_creatorId].push(videoCount);
         if ((_tags & 1) != 0) {

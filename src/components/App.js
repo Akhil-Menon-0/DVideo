@@ -60,15 +60,18 @@ async function loadBlockchainData(setAccount, setContract) {
     // const latest = await dvideo.methods.videos(videosCount).call()
     // setCurrentHash(latest.hash);
     // setCurrentTitle(latest.title);
+    return [accounts[0], dvideo];
   } else {
     window.alert('DVideo contract not deployed to detected network.')
   }
 }
 
-async function getUserFromLocalStorage(account, setUser, setTransactions) {
+async function getUserFromLocalStorage(account, setUser, setTransactions, contract) {
   let userSession = JSON.parse(window.localStorage.getItem(account))
   if (userSession !== null) {
-    setUser(userSession.publicKey) //create user of context from userSession
+    let user = await contract.methods.PublicKey_User(userSession.publicKey).call();
+    setUser(user) //create user of context from userSession
+    console.log(user)
     setTransactions(userSession.transactions)
   }
 }
@@ -82,8 +85,8 @@ function App() {
     async function fetchData() {
       setinit(true)
       await loadWeb3();
-      await loadBlockchainData(setAccount, setContract);
-      // await getUserFromLocalStorage(account, setUser, setTransactions)
+      const localUseResult = await loadBlockchainData(setAccount, setContract);
+      await getUserFromLocalStorage(localUseResult[0], setUser, setTransactions, localUseResult[1])
       setinit(false)
     }
     fetchData();

@@ -11,9 +11,9 @@ const ContextProvider = ({ children }) => {
     const saveTransaction = (account, setTransactions, newTransaction) => {
 
         //save transaction local storage 
-        // let userSession = JSON.parse(window.localStorage.getItem(account))
-        // userSession.transactions = [...userSession.transactions, newTransaction]
-        // window.localStorage.setItem(account, JSON.stringify(userSession))
+        let userSession = JSON.parse(window.localStorage.getItem(account))
+        userSession.transactions = [...userSession.transactions, newTransaction]
+        window.localStorage.setItem(account, JSON.stringify(userSession))
         setTransactions((prevState) => {
             return [...prevState, newTransaction]
         })
@@ -22,9 +22,9 @@ const ContextProvider = ({ children }) => {
     const removeTransaction = (account, setTransactions, index, transactions) => {
 
         //remove transaction from local storage
-        // let userSession = JSON.parse(window.localStorage.getItem(account))
-        // userSession.transactions.splice(index, 1)
-        // window.localStorage.setItem(account, JSON.stringify(userSession))
+        let userSession = JSON.parse(window.localStorage.getItem(account))
+        userSession.transactions.splice(index, 1)
+        window.localStorage.setItem(account, JSON.stringify(userSession))
         let temp = transactions.slice()
         temp.splice(index, 1)
         setTransactions(temp)
