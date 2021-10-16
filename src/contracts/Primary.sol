@@ -12,6 +12,7 @@ contract Primary {
     mapping(string => uint256) public Title_Video;
     mapping(string => uint256[]) public User_Videos;
     mapping(string => User) public PublicKey_User;
+    mapping(string => string) public UserName_User;
 
     struct Video {
         uint256 id;
@@ -34,8 +35,6 @@ contract Primary {
         mapping(string => uint256[]) Playlist_Videos;
     }
 
-    event VideoUploaded(uint256 id, string hash, string title, address author);
-
     constructor() public {}
 
     function signup(string memory _userName, string memory _publicKey) public {
@@ -47,6 +46,7 @@ contract Primary {
             subscriptions,
             0
         );
+        UserName_User[_userName] = _publicKey;
     }
 
     function transactions(
@@ -161,11 +161,7 @@ contract Primary {
         }
     }
 
-    function stringToUint(string memory s)
-        public
-        view
-        returns (uint256 result)
-    {
+    function stringToUint(string memory s) public returns (uint256 result) {
         bytes memory b = bytes(s);
         uint256 i;
         result = 0;
