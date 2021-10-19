@@ -31,10 +31,19 @@ async function loadWeb3() {
   }
   else {
     window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
+    window.location.href="https://metamask.io/"
   }
 }
 
 async function loadBlockchainData(setAccount, setContract) {
+  window.ethereum.on('accountsChanged', function (accounts) {
+    window.alert("Account changed.Refreshing...")
+    window.location.reload()
+  })
+  window.ethereum.on('networkChanged', function(networkId){
+    window.alert("Network changed.Refreshing...")
+    window.location.reload()
+  })
   const web3 = window.web3
   // Load account
   const accounts = await web3.eth.getAccounts()
@@ -63,6 +72,7 @@ async function loadBlockchainData(setAccount, setContract) {
     return [accounts[0], dvideo];
   } else {
     window.alert('DVideo contract not deployed to detected network.')
+    window.location.reload()
   }
 }
 
@@ -80,11 +90,11 @@ function App() {
 
   const [init, setinit] = useState(true)
   const { account, setUser, setTransactions, contract, setContract, setAccount } = useContext(Context)
-
   useEffect(() => {
     async function fetchData() {
       setinit(true)
       await loadWeb3();
+      
       const localUseResult = await loadBlockchainData(setAccount, setContract);
       await getUserFromLocalStorage(localUseResult[0], setUser, setTransactions, localUseResult[1])
       setinit(false)
@@ -92,12 +102,15 @@ function App() {
     fetchData();
   }, [])
 
+
+  
   if (init === true) {
     return (
-      <h1>Loading</h1>
+      <h1>Loading...</h1>
     )
   }
 
+  
   return (
     <React.Fragment>
       <Navbar />
@@ -110,7 +123,7 @@ function App() {
         <PrivateRoute component={UploadOption} path="/upload" exact={true} strict={true} />
         <PrivateRoute component={UploadForm} path="/upload/:uploadOption" exact={true} strict={true} />
         <PublicRoute restricted={false} component={ViewVideo} path="/video/:videoId" exact={true} strict={true} />
-        <PublicRoute restricted={false} component={SearchResults} path="/search/:searchString" exact={true} strict={true} />
+        <PublicRoute restricted={false} component={SearchResults} path="/search/" exact={true} strict={true} />
         <PrivateRoute component={PrivateProfilePlaylist} path="/playlist/:playlistName" exact={true} strict={true} />
         <PrivateRoute component={AllTransactions} path="/profile/transactions" exact={true} strict={true} />
         <PublicRoute restricted={false} component={InvalidPage} />

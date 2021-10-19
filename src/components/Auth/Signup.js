@@ -13,6 +13,22 @@ async function duplicacyCheck(contract, userName, publicKey) {
     return result;
 }
 
+function isAlphaNumeric(str) {
+    var code, i, len;
+  
+    for (i = 0, len = str.length; i < len; i++) {
+      code = str.charCodeAt(i);
+      if (!(code > 47 && code < 58) && // numeric (0-9)
+          !(code > 64 && code < 91) && // upper alpha (A-Z)
+          !(code > 96 && code < 123)) { // lower alpha (a-z)
+
+            if(code===95)
+            continue
+        return false;
+      }
+    }
+    return true;
+  };
 function Signup() {
 
     const { contract, account } = useContext(Context)
@@ -28,6 +44,11 @@ function Signup() {
                 <div className="col-md-3 border border-danger overflow-auto text-center" style={{ maxHeight: '768px', minWidth: '175px', margin: '10px' }}>
                     <h5><b>Signup</b></h5>
                     <form onSubmit={async (event) => {
+                        if(!isAlphaNumeric(userName)){
+                            window.alert("Username can only have letters and numbers.")
+                            setUserName("")
+                            return
+                        }
                         setSignupStaus("fired")
                         event.preventDefault()
                         console.log(account)

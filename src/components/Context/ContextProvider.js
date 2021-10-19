@@ -6,6 +6,7 @@ const ContextProvider = ({ children }) => {
     const [account, setAccount] = useState(null);
     const [contract, setContract] = useState(null);
     const [user, setUser] = useState(null)
+    const [searchString, setSearchString] = useState("");
     const [transactions, setTransactions] = useState([])
 
     const saveTransaction = (account, setTransactions, newTransaction) => {
@@ -32,6 +33,8 @@ const ContextProvider = ({ children }) => {
 
     const contextObject = {
         account,
+        searchString,
+        setSearchString,
         setAccount,
         contract,
         setContract,

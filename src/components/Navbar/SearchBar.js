@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState,useContext } from 'react'
+import Context from '../Context/Context'
 import { Link } from 'react-router-dom';
 
 function SearchBar() {
 
-    const [searchString, setSearchString] = useState("")
+    const [lsearchString, setlSearchString] = useState("")
+    const {setSearchString}=useContext(Context)
     let searchButton = null
 
     return (
@@ -11,20 +13,24 @@ function SearchBar() {
             <div className="col-6">
                 <input
                     type='text'
-                    value={searchString}
+                    value={lsearchString}
+                    maxLength="100"
                     onKeyPress={(e) => {
                         if (e.key === 'Enter') {
-                            setSearchString("")
+                            setlSearchString("")
                             searchButton.click()
                         }
                     }}
-                    onChange={(e) => { setSearchString(e.target.value) }}
+                    onChange={(e) => { setlSearchString(e.target.value)}}
                 />
-                <Link to={`/search/${searchString}`} exact="true" strict="true">
+                <Link to={`/search/`} exact="true" strict="true">
                     <button
-                        onClick={() => { setSearchString("") }}
+                        onClick={() => { 
+                        
+                        setSearchString(lsearchString)
+                        setlSearchString("") }}
                         className="btn btn-outline-danger"
-                        disabled={searchString === "" ? true : false}
+                        disabled={lsearchString === "" ? true : false}
                         ref={node => { searchButton = node }}
                     >
                         Search
