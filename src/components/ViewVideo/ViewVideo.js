@@ -14,7 +14,7 @@ function ViewVideo(props) {
             let now = new Date()
             let newTransaction = {
                 type: "view",
-                userId: user,
+                userId: user.publicKey,
                 timestamp: now,
                 params: [props.videoId]
             }
@@ -29,7 +29,7 @@ function ViewVideo(props) {
                 let now = new Date()
                 let newTransaction = {
                     type: "like",
-                    userId: user,
+                    userId: user.publicKey,
                     timestamp: now,
                     params: [props.videoId]
                 }
@@ -39,7 +39,7 @@ function ViewVideo(props) {
                 let now = new Date();
                 let newTransaction = {
                     type: "subscribe",
-                    userId: user,
+                    userId: user.publicKey,
                     timestamp: now,
                     params: ["subscribedUserId"]
                 }
@@ -58,7 +58,7 @@ function ViewVideo(props) {
                     let now = new Date();
                     let newTransaction = {
                         type: "comment",
-                        userId: user,
+                        userId: user.publicKey,
                         timestamp: now,
                         params: [props.videoId, comment]
                     }

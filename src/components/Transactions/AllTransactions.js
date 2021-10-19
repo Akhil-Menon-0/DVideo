@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 
 function AllTransactions() {
 
-    const { account, transactions, setTransactions, removeTransaction } = useContext(Context)
+    const { account, transactions, setTransactions, removeTransaction, sendTransactions } = useContext(Context)
     let transactionsComp = transactions.map((transaction, index) => {
         return (
             <tr key={index}>
@@ -33,6 +33,7 @@ function AllTransactions() {
     return (
         <div>
             <h1>All transactions</h1>
+            <button onClick={sendTransactions}>Submit</button>
             <table className="table table-striped">
                 <tbody>
                     {transactionsComp}

@@ -65,7 +65,7 @@ function UploadIPFS(props) {
                 let now = new Date()
                 let newTransaction = {
                   type: "upload",
-                  userId: user,
+                  userId: user.publicKey,
                   timestamp: now,
                   params: [videoTitle, description, tags, videoHash]
                 }
