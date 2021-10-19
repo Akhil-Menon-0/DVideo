@@ -31,7 +31,7 @@ async function loadWeb3() {
   }
   else {
     window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
-    window.location.href="https://metamask.io/"
+    window.location.href = "https://metamask.io/"
   }
 }
 
@@ -40,7 +40,7 @@ async function loadBlockchainData(setAccount, setContract) {
     window.alert("Account changed.Refreshing...")
     window.location.reload()
   })
-  window.ethereum.on('networkChanged', function(networkId){
+  window.ethereum.on('networkChanged', function (networkId) {
     window.alert("Network changed.Refreshing...")
     window.location.reload()
   })
@@ -53,7 +53,6 @@ async function loadBlockchainData(setAccount, setContract) {
   const networkData = DVideo.networks[networkId]
   if (networkData) {
     const dvideo = new web3.eth.Contract(DVideo.abi, networkData.address)
-    console.log(dvideo);
     setContract(dvideo)  //saving video contract in context
     // const videosCount = await dvideo.methods.videoCount().call()
     // setVideoCount(videosCount)
@@ -80,8 +79,13 @@ async function getUserFromLocalStorage(account, setUser, setTransactions, contra
   let userSession = JSON.parse(window.localStorage.getItem(account))
   if (userSession !== null) {
     let user = await contract.methods.PublicKey_User(userSession.publicKey).call();
+    let subscriptions = await contract.methods.getUserSubscriptions(user.publicKey).call();
+    let likedVideos = await contract.methods.getUserPlaylist(user.publicKey, "liked").call();
+    let savedVideos = await contract.methods.getUserPlaylist(user.publicKey, "later").call();
+    user.subscriptions = subscriptions
+    user.liked = likedVideos
+    user.saved = savedVideos
     setUser(user) //create user of context from userSession
-    console.log(user)
     setTransactions(userSession.transactions)
   }
 }
@@ -94,7 +98,7 @@ function App() {
     async function fetchData() {
       setinit(true)
       await loadWeb3();
-      
+
       const localUseResult = await loadBlockchainData(setAccount, setContract);
       await getUserFromLocalStorage(localUseResult[0], setUser, setTransactions, localUseResult[1])
       setinit(false)
@@ -103,14 +107,14 @@ function App() {
   }, [])
 
 
-  
+
   if (init === true) {
     return (
       <h1>Loading...</h1>
     )
   }
 
-  
+
   return (
     <React.Fragment>
       <Navbar />

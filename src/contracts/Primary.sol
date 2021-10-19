@@ -115,6 +115,14 @@ contract Primary {
                 subscribe(_userId[transaction], _params[transaction][0]);
             } else if (
                 keccak256(abi.encodePacked(_type[transaction])) ==
+                keccak256(abi.encodePacked("save"))
+            ) {
+                save(
+                    _userId[transaction],
+                    stringToUint(_params[transaction][0])
+                );
+            } else if (
+                keccak256(abi.encodePacked(_type[transaction])) ==
                 keccak256(abi.encodePacked("upload"))
             ) {
                 uploadVideo(
@@ -131,12 +139,15 @@ contract Primary {
 
     function watch(string memory _userId, uint256 _videoId) public {
         Id_Video[_videoId].views++;
-        PublicKey_User[_userId].Playlist_Videos["viewed"].push(_videoId);
     }
 
     function like(string memory _userId, uint256 _videoId) public {
         Id_Video[_videoId].hearts++;
         PublicKey_User[_userId].Playlist_Videos["liked"].push(_videoId);
+    }
+
+    function save(string memory _userId, uint256 _videoId) public {
+        PublicKey_User[_userId].Playlist_Videos["later"].push(_videoId);
     }
 
     function comment(uint256 _videoId, string memory _comment) public {

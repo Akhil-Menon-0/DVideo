@@ -8,7 +8,7 @@ function Navbar() {
     const { account, user, setUser, setTransactions } = useContext(Context)
     return (
         <div className="container">
-            <Link to="/video/771">view video</Link>&nbsp;
+            <Link to="/video/1">view video</Link>&nbsp;
             <Link to="/profile">my profile</Link>
             <div className="row" style={{ backgroundColor: "blue" }}>
                 <div className="col-2"><Link to="/" exact="true" strict="true"><h2>Home</h2></Link></div>

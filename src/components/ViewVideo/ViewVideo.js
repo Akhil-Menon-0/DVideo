@@ -3,13 +3,27 @@ import Context from '../Context/Context'
 
 function ViewVideo(props) {
 
-    const { account, user, transactions, setTransactions, saveTransaction } = useContext(Context)
+    const { account, user, transactions, setTransactions, saveTransaction, contract } = useContext(Context)
     const [comment, setComment] = useState("")
+    const [video, setVideo] = useState();
+    const [comments, setComments] = useState();
+    const [init, setinit] = useState(true)
     let commentButton = null
 
     useEffect(() => {
         //to-do
         //use a formula for calculating a view
+        const fecthVideo = async () => {
+            let video = await contract.methods.Id_Video(props.videoId).call();
+            let comments = await contract.methods.getVideoComments(props.videoId).call()
+            console.log(video)
+            console.log(comments)
+            setVideo(video)
+            setComments(comments)
+            setinit(false)
+        }
+        setinit(true)
+        fecthVideo()
         if (user !== null) {
             let now = new Date()
             let newTransaction = {
@@ -22,8 +36,21 @@ function ViewVideo(props) {
         }
     }, [])
 
+    if (init === true) {
+        return (
+            <h1>Video loading</h1>
+        )
+    }
     return (
         <div>
+            <video
+                src={`https://ipfs.infura.io/ipfs/${video.hash}`}
+                style={{ width: '500px', height: '500px' }}
+                controls
+            >
+                VIDEOEOEOEO
+            </video>
+
             <h1>View video id {props.videoId}</h1>
             <button disabled={user === null ? true : false} onClick={() => {
                 let now = new Date()
@@ -41,10 +68,21 @@ function ViewVideo(props) {
                     type: "subscribe",
                     userId: user.publicKey,
                     timestamp: now,
-                    params: ["subscribedUserId"]
+                    params: [video.creatorId]
                 }
                 saveTransaction(account, setTransactions, newTransaction)
             }}>Subscribe</button>
+            <br />
+            <button disabled={user === null ? true : false} onClick={() => {
+                let now = new Date();
+                let newTransaction = {
+                    type: "save",
+                    userId: user.publicKey,
+                    timestamp: now,
+                    params: [video.id]
+                }
+                saveTransaction(account, setTransactions, newTransaction)
+            }}>Watch later</button>
             <br />
             <input
                 type="text"

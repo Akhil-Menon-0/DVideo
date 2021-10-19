@@ -24,6 +24,9 @@ function AllTransactions() {
                 {transaction.type === "subscribe" &&
                     <th scope="col"><Link to={`/publicProfile/${transaction.params[0]}`} exact="true" strict="true">subscribed username</Link></th>
                 }
+                {transaction.type === "save" &&
+                    <th scope="col"><Link to={`/video/${transaction.params[0]}`} exact="true" strict="true">Watch later</Link></th>
+                }
                 <th onClick={() => {
                     removeTransaction(account, setTransactions, index, transactions)
                 }} role="button">Remove</th>
