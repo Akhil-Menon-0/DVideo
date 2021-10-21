@@ -7,7 +7,7 @@ function PrivateProfile() {
     const [init, setInit] = useState(true)
     useEffect(() => {
         let fetch = async () => {
-            let temp = user
+            let temp = await contract.methods.PublicKey_User(user.publicKey).call();
             let subscriptions = await contract.methods.getUserSubscriptions(user.publicKey).call();
             let likedVideos = await contract.methods.getUserPlaylist(user.publicKey, "liked").call();
             let savedVideos = await contract.methods.getUserPlaylist(user.publicKey, "later").call();
