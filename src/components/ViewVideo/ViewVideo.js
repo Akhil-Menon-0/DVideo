@@ -8,6 +8,10 @@ function ViewVideo(props) {
     const [video, setVideo] = useState();
     const [comments, setComments] = useState();
     const [init, setinit] = useState(true)
+    const [likeBtn, setLikeBtn] = useState("")
+    const [subscribeBtn, setSubscribeBtn] = useState("")
+    const [pendingComments, setPendingComments] = useState(0)
+    const [saveBtn, setSaveBtn] = useState("")
     let commentButton = null
 
     useEffect(() => {
@@ -20,22 +24,36 @@ function ViewVideo(props) {
             console.log(comments)
             setVideo(video)
             setComments(comments)
-            setinit(false)
+            if (user === null) {
+                setLikeBtn("Login to continue")
+                setSaveBtn("Login to continue")
+                setSubscribeBtn("Login to continue")
+            }
+            else {
+                setPendingComments(0)
+                let now = new Date()
+                let newTransaction = {
+                    type: "view",
+                    userId: user.publicKey,
+                    timestamp: now,
+                    params: [props.videoId]
+                }
+                saveTransaction(account, setTransactions, newTransaction)
+                if (user.liked.includes(props.videoId)) { setLikeBtn("Liked") }
+                if (user.saved.includes(props.videoId)) { setSaveBtn("Saved") }
+                if (user.subscriptions.includes(video.creatorId)) { setSubscribeBtn("Subscribed") }
+                for (let i of transactions) {
+                    if (i.type === "like" && i.params[0] === props.videoId) { setLikeBtn("Pending transaction") }
+                    if (i.type === "subscribe" && i.params[0] === video.creatorId) { setSubscribeBtn("Pending transaction") }
+                    if (i.type === "save" && i.params[0] === props.videoId) { setSaveBtn("Pending transaction") }
+                    if (i.type === "comment" && i.params[0] === props.videoId) { let temp = pendingComments; setPendingComments(temp + 1) }
+                }
+                setinit(false)
+            }
         }
         setinit(true)
         fecthVideo()
-        if (user !== null) {
-            let now = new Date()
-            let newTransaction = {
-                type: "view",
-                userId: user.publicKey,
-                timestamp: now,
-                params: [props.videoId]
-            }
-            saveTransaction(account, setTransactions, newTransaction)
-        }
-    }, [])
-
+    }, [props.videoId])
     if (init === true) {
         return (
             <h1>Video loading</h1>
@@ -52,8 +70,9 @@ function ViewVideo(props) {
             </video>
 
             <h1>View video id {props.videoId}</h1>
-            <button disabled={user === null ? true : false} onClick={() => {
+            <button disabled={likeBtn === "" ? false : true} onClick={() => {
                 let now = new Date()
+                setLikeBtn("Pending transaction")
                 let newTransaction = {
                     type: "like",
                     userId: user.publicKey,
@@ -61,9 +80,10 @@ function ViewVideo(props) {
                     params: [props.videoId]
                 }
                 saveTransaction(account, setTransactions, newTransaction)
-            }}>Like</button>
-            <button disabled={user === null ? true : false} onClick={() => {
+            }} data-toggle="tooltip" title={likeBtn}>Like</button>
+            <button disabled={subscribeBtn === "" ? false : true} onClick={() => {
                 let now = new Date();
+                setSubscribeBtn("pendng transaction")
                 let newTransaction = {
                     type: "subscribe",
                     userId: user.publicKey,
@@ -71,10 +91,11 @@ function ViewVideo(props) {
                     params: [video.creatorId]
                 }
                 saveTransaction(account, setTransactions, newTransaction)
-            }}>Subscribe</button>
+            }} data-toggle="tooltip" title={subscribeBtn}>Subscribe</button>
             <br />
-            <button disabled={user === null ? true : false} onClick={() => {
+            <button disabled={saveBtn === "" ? false : true} onClick={() => {
                 let now = new Date();
+                setSaveBtn("pedning transaction")
                 let newTransaction = {
                     type: "save",
                     userId: user.publicKey,
@@ -82,7 +103,7 @@ function ViewVideo(props) {
                     params: [video.id]
                 }
                 saveTransaction(account, setTransactions, newTransaction)
-            }}>Watch later</button>
+            }} data-toggle="tooltip" title={saveBtn}>Watch later</button>
             <br />
             <input
                 type="text"
@@ -94,6 +115,8 @@ function ViewVideo(props) {
             <button
                 onClick={() => {
                     let now = new Date();
+                    let temp = pendingComments
+                    setPendingComments(temp + 1)
                     let newTransaction = {
                         type: "comment",
                         userId: user.publicKey,
@@ -105,7 +128,7 @@ function ViewVideo(props) {
                 }}
                 ref={(node) => { commentButton = node }}
                 disabled={comment === "" || user === null ? true : false}
-            >Comment</button>
+                data-toggle="tooltip" title={`Pending Comments:${pendingComments}`}>Comment</button>
             <button onClick={() => { console.log(transactions); }}> show</button>
         </div >
     )
