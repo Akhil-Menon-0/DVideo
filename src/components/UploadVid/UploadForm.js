@@ -3,7 +3,6 @@ import UploadIPFS from './UploadIPFS'
 import UploadScratch from './UploadScratch'
 import UploadInvalid from './UploadInvalid'
 function UploadForm(props) {
-    console.log(props)
     if (props.uploadOption === "IPFS_Only") {
         return (
             <UploadIPFS />

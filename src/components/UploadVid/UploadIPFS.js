@@ -108,19 +108,19 @@ function UploadIPFS(props) {
               <br /><label>Tags</label>
               <div className="check">
                 <label>
-                  <input type="checkbox" value="off" name="1" onClick={(e) => { selectShortlistedApplicant(e); }} autocomplete="off" />
+                  <input type="checkbox" value="off" name="0" onClick={(e) => { selectShortlistedApplicant(e); }} autocomplete="off" />
                   Option 1
                 </label>
               </div>
               <div className="check">
                 <label>
-                  <input type="checkbox" value="off" name="2" onClick={(e) => { selectShortlistedApplicant(e); }} autocomplete="off" />
+                  <input type="checkbox" value="off" name="1" onClick={(e) => { selectShortlistedApplicant(e); }} autocomplete="off" />
                   Option 2
                 </label>
               </div>
               <div className="check">
                 <label>
-                  <input type="checkbox" value="off" name="3" onClick={(e) => { selectShortlistedApplicant(e); }} autocomplete="off" />
+                  <input type="checkbox" value="off" name="2" onClick={(e) => { selectShortlistedApplicant(e); }} autocomplete="off" />
                   Option 3
                 </label>
               </div>
