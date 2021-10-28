@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react'
 import Context from '../Context/Context'
+import  { Redirect } from 'react-router-dom'
 
 
 //Declare IPFS
@@ -50,6 +51,7 @@ function UploadScratch(props) {
   const [init, setinit] = useState(null)
   const [tags, setTags] = useState("0")
   const [upload, setUpload] = useState(false)
+  const [load, setLoad] = useState(false)
   const selectShortlistedApplicant = (e) => {
     const checked = e.target.checked;
     const k = parseInt(e.target.name)
@@ -70,6 +72,8 @@ function UploadScratch(props) {
       setTags(StringTag)
     }
   };
+  if (upload)
+    return <Redirect to='/profile/transactions'/>
   return (
     <div className="container-fluid text-monospace">
       <br></br>
@@ -80,17 +84,18 @@ function UploadScratch(props) {
           <h5><b>Upload Video</b></h5>
           <form onSubmit={(event) => {
             event.preventDefault()
-
+            setLoad(true)
             if (parseInt(tags) === 0) {
               alert("Please select atleast one tag!")
               return
             }
             console.log("Submitting")
             console.log(tags)
-            setUpload(true)
+            
 
             uploadVideo(setinit, buffer)
               .then((result) => {
+                setUpload(true)
                 let now = new Date()
                 let newTransaction = {
                   type: "upload",
@@ -102,6 +107,10 @@ function UploadScratch(props) {
                 setVideoTitle("")
                 setDescription("")
                 setTags("0")
+                setLoad(false)
+                console.log("Uploaded")
+                
+                
               })
               .catch((err) => {
                 setIpfsUploadMsg("Error uploading video to IPFS")
@@ -149,11 +158,24 @@ function UploadScratch(props) {
                   Option 3
                 </label>
               </div>
+              <div className="check">
+                <label>
+                  <input type="checkbox" value="off" name="3" onClick={(e) => { selectShortlistedApplicant(e); }} autoComplete="off" />
+                  Option 4
+                </label>
+              </div>
+              <div className="check">
+                <label>
+                  <input type="checkbox" value="off" name="4" onClick={(e) => { selectShortlistedApplicant(e); }} autoComplete="off" />
+                  Option 5
+                </label>
+              </div>
 
             </div>
             <button type="submit" className="btn btn-danger btn-block btn-sm" >Upload!</button>
             &nbsp;
           </form>
+          {load&&<h1>Loading....</h1>}
           {ipfsUploadMsg === "" ? null : <div className="alert alert-danger">{ipfsUploadMsg}</div>}
         </div>
       </div>

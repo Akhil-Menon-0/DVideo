@@ -9,9 +9,9 @@ const ContextProvider = ({ children }) => {
     const [searchString, setSearchString] = useState("");
     const [transactions, setTransactions] = useState([])
 
-    useEffect(() => {
-        if (transactions.length > 0 && transactions[transactions.length - 1].type === "upload") { sendTransactions() }
-    }, [transactions])
+    // useEffect(() => {
+    //     if (transactions.length > 0 && transactions[transactions.length - 1].type === "upload") { sendTransactions() }
+    // }, [transactions])
 
     const sendTransactions = async () => {
         let type = []
@@ -36,6 +36,8 @@ const ContextProvider = ({ children }) => {
                 let userSession = JSON.parse(window.localStorage.getItem(account))
                 userSession.transactions = []
                 window.localStorage.setItem(account, JSON.stringify(userSession))
+
+                window.location.reload()
             })
         } catch (err) {
             console.log(err)

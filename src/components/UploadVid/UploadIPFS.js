@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import Context from '../Context/Context'
 import axios from 'axios'
+import  { Redirect } from 'react-router-dom'
 
 //Declare IPFS
 const ipfsClient = require('ipfs-http-client')
@@ -22,7 +23,9 @@ function UploadIPFS(props) {
   const [description, setDescription] = useState("")
   const [tags, setTags] = useState("0")
   const [videoHash, setVideoHash] = useState("")
+  const [upload, setUpload] = useState(false)
   const [preview, setPreview] = useState(false)
+  const [load, setLoad] = useState(false)
   const selectShortlistedApplicant = (e) => {
     const checked = e.target.checked;
     const k = parseInt(e.target.name)
@@ -43,6 +46,8 @@ function UploadIPFS(props) {
       setTags(StringTag)
     }
   };
+  if (upload)
+    return <Redirect to='/profile/transactions'/>
   return (
     <div className="container-fluid text-monospace">
       <br></br>
@@ -52,6 +57,7 @@ function UploadIPFS(props) {
         <div className="col-md-3 border border-danger overflow-auto text-center" style={{ maxHeight: '768px', minWidth: '175px', margin: '10px' }}>
           <h5><b>Upload Video</b></h5>
           <form onSubmit={(event) => {
+            setLoad(true)
             event.preventDefault()
             if (parseInt(tags) === 0) {
               alert("Please select atleast one tag!")
@@ -62,6 +68,7 @@ function UploadIPFS(props) {
                 console.log(response);
                 console.log("Submitting")
                 setPreview(true)
+                setUpload(true)
                 let now = new Date()
                 let newTransaction = {
                   type: "upload",
@@ -75,6 +82,7 @@ function UploadIPFS(props) {
                 setPreview(false)
                 setVideoTitle("")
                 setDescription("")
+                setLoad(false)
                 setTags("0")
               })
               .catch(function (error) {
@@ -124,6 +132,18 @@ function UploadIPFS(props) {
                   Option 3
                 </label>
               </div>
+              <div className="check">
+                <label>
+                  <input type="checkbox" value="off" name="3" onClick={(e) => { selectShortlistedApplicant(e); }} autocomplete="off" />
+                  Option 4
+                </label>
+              </div>
+              <div className="check">
+                <label>
+                  <input type="checkbox" value="off" name="4" onClick={(e) => { selectShortlistedApplicant(e); }} autocomplete="off" />
+                  Option 5
+                </label>
+              </div>
             </div>
             <button type="button" className="btn btn-danger btn-block btn-sm" onClick={() => {
               axios.get(`https://ipfs.infura.io/ipfs/${videoHash}`)
@@ -154,7 +174,7 @@ function UploadIPFS(props) {
             <button type="submit" className="btn btn-danger btn-block btn-sm">Upload!</button>
             &nbsp;
           </form>
-
+            {load&&<h1>Loading...</h1>}
 
 
         </div>
