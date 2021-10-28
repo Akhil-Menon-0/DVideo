@@ -11,10 +11,15 @@ function PrivateProfile() {
             let subscriptions = await contract.methods.getUserSubscriptions(user.publicKey).call();
             let likedVideos = await contract.methods.getUserPlaylist(user.publicKey, "liked").call();
             let savedVideos = await contract.methods.getUserPlaylist(user.publicKey, "later").call();
+            let myVideos=await contract.methods.getUserVideos(user.publicKey).call();
+            console.log(contract.methods)
+            console.log(myVideos)
             temp.subscriptions = subscriptions
             temp.liked = likedVideos
             temp.saved = savedVideos
+            temp.myVideos=myVideos
             setUser(temp)
+            console.log(user)
             setInit(false)
         }
         fetch();

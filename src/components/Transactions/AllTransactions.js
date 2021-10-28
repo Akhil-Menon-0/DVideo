@@ -13,6 +13,15 @@ function AllTransactions() {
                 {transaction.type === "like" &&
                     <th scope="col"><Link to={`/video/${transaction.params[0]}`} exact="true" strict="true">Video title</Link></th>
                 }
+                {transaction.type === "upload" &&
+                    <th scope="col"><video
+                    src={`https://ipfs.infura.io/ipfs/${transaction.params[3]}`}
+                    style={{ width: '150px' }}
+                    controls
+                  >
+                    Kuch to gadbad hai daya
+                  </video>    Video title</th>
+                }
                 {transaction.type === "comment" &&
                     <th scope="col"><Link to={`/video/${transaction.params[0]}`} exact="true" strict="true">Video title</Link>
                         :<b>{transaction.params[1]}</b>

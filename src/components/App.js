@@ -82,9 +82,11 @@ async function getUserFromLocalStorage(account, setUser, setTransactions, contra
     let subscriptions = await contract.methods.getUserSubscriptions(user.publicKey).call();
     let likedVideos = await contract.methods.getUserPlaylist(user.publicKey, "liked").call();
     let savedVideos = await contract.methods.getUserPlaylist(user.publicKey, "later").call();
+    let myVideos=await contract.methods.getUserVideos(user.publicKey).call();
     user.subscriptions = subscriptions
     user.liked = likedVideos
     user.saved = savedVideos
+    user.myVideos=myVideos
     setUser(user) //create user of context from userSession
     setTransactions(userSession.transactions)
   }

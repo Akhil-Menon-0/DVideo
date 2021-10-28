@@ -9,6 +9,8 @@ contract Primary {
     uint256[] public Tag1_Videos;
     uint256[] public Tag2_Videos;
     uint256[] public Tag3_Videos;
+    uint256[] public Tag4_Videos;
+    uint256[] public Tag5_Videos;
     mapping(string => uint256) public Title_Video;
     mapping(string => uint256[]) public User_Videos;
     mapping(string => User) public PublicKey_User;
@@ -51,6 +53,14 @@ contract Primary {
         returns (uint256[] memory)
     {
         return PublicKey_User[_publicKey].Playlist_Videos[_playlist];
+    }
+
+    function getUserVideos(string memory _publicKey)
+        public
+        view
+        returns (uint256[] memory)
+    {
+        return User_Videos[_publicKey];
     }
 
     function getVideoComments(uint256 _videoId)
@@ -193,6 +203,12 @@ contract Primary {
         }
         if ((_tags >> 2) & 1 != 0) {
             Tag3_Videos.push(videoCount);
+        }
+        if ((_tags >> 3) & 1 != 0) {
+            Tag4_Videos.push(videoCount);
+        }
+        if ((_tags >> 4) & 1 != 0) {
+            Tag5_Videos.push(videoCount);
         }
     }
 
