@@ -46,6 +46,7 @@ const ContextProvider = ({ children }) => {
 
     const saveTransaction = (account, setTransactions, newTransaction) => {
 
+        console.log(newTransaction)
         setTransactions([...transactions, newTransaction])
         //save transaction local storage 
         let userSession = JSON.parse(window.localStorage.getItem(account))

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import Context from '../Context/Context'
 import axios from 'axios'
-import  { Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 
 //Declare IPFS
 const ipfsClient = require('ipfs-http-client')
@@ -17,8 +17,6 @@ function UploadIPFS(props) {
     saveTransaction
   } = useContext(Context)
 
-  console.log(videoContract)
-  console.log(account)
   const [videoTitle, setVideoTitle] = useState("")
   const [description, setDescription] = useState("")
   const [tags, setTags] = useState("0")
@@ -47,7 +45,7 @@ function UploadIPFS(props) {
     }
   };
   if (upload)
-    return <Redirect to='/profile/transactions'/>
+    return <Redirect to='/profile/transactions' />
   return (
     <div className="container-fluid text-monospace">
       <br></br>
@@ -106,7 +104,7 @@ function UploadIPFS(props) {
               <input
                 id="videoTitle"
                 type="text"
-                ref={(input) => { setVideoTitle(input) }}
+                onChange={(e) => { setVideoTitle(e.target.value) }}
                 className="form-control-sm"
                 placeholder="Enter the title"
                 maxLength="500"
@@ -116,31 +114,31 @@ function UploadIPFS(props) {
               <br /><label>Tags</label>
               <div className="check">
                 <label>
-                  <input type="checkbox" value="off" name="0" onClick={(e) => { selectShortlistedApplicant(e); }} autocomplete="off" />
+                  <input type="checkbox" value="off" name="0" onClick={(e) => { selectShortlistedApplicant(e); }} autoComplete="off" />
                   Option 1
                 </label>
               </div>
               <div className="check">
                 <label>
-                  <input type="checkbox" value="off" name="1" onClick={(e) => { selectShortlistedApplicant(e); }} autocomplete="off" />
+                  <input type="checkbox" value="off" name="1" onClick={(e) => { selectShortlistedApplicant(e); }} autoComplete="off" />
                   Option 2
                 </label>
               </div>
               <div className="check">
                 <label>
-                  <input type="checkbox" value="off" name="2" onClick={(e) => { selectShortlistedApplicant(e); }} autocomplete="off" />
+                  <input type="checkbox" value="off" name="2" onClick={(e) => { selectShortlistedApplicant(e); }} autoComplete="off" />
                   Option 3
                 </label>
               </div>
               <div className="check">
                 <label>
-                  <input type="checkbox" value="off" name="3" onClick={(e) => { selectShortlistedApplicant(e); }} autocomplete="off" />
+                  <input type="checkbox" value="off" name="3" onClick={(e) => { selectShortlistedApplicant(e); }} autoComplete="off" />
                   Option 4
                 </label>
               </div>
               <div className="check">
                 <label>
-                  <input type="checkbox" value="off" name="4" onClick={(e) => { selectShortlistedApplicant(e); }} autocomplete="off" />
+                  <input type="checkbox" value="off" name="4" onClick={(e) => { selectShortlistedApplicant(e); }} autoComplete="off" />
                   Option 5
                 </label>
               </div>
@@ -174,7 +172,7 @@ function UploadIPFS(props) {
             <button type="submit" className="btn btn-danger btn-block btn-sm">Upload!</button>
             &nbsp;
           </form>
-            {load&&<h1>Loading...</h1>}
+          {load && <h1>Loading...</h1>}
 
 
         </div>

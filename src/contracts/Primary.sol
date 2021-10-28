@@ -98,10 +98,7 @@ contract Primary {
                 keccak256(abi.encodePacked(_type[transaction])) ==
                 keccak256(abi.encodePacked("view"))
             ) {
-                watch(
-                    _userId[transaction],
-                    stringToUint(_params[transaction][0])
-                );
+                watch(stringToUint(_params[transaction][0]));
             } else if (
                 keccak256(abi.encodePacked(_type[transaction])) ==
                 keccak256(abi.encodePacked("like"))
@@ -147,7 +144,7 @@ contract Primary {
         }
     }
 
-    function watch(string memory _userId, uint256 _videoId) public {
+    function watch(uint256 _videoId) public {
         Id_Video[_videoId].views++;
     }
 

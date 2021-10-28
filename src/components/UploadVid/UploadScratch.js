@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import Context from '../Context/Context'
-import  { Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 
 
 //Declare IPFS
@@ -73,7 +73,7 @@ function UploadScratch(props) {
     }
   };
   if (upload)
-    return <Redirect to='/profile/transactions'/>
+    return <Redirect to='/profile/transactions' />
   return (
     <div className="container-fluid text-monospace">
       <br></br>
@@ -91,7 +91,7 @@ function UploadScratch(props) {
             }
             console.log("Submitting")
             console.log(tags)
-            
+
 
             uploadVideo(setinit, buffer)
               .then((result) => {
@@ -109,8 +109,8 @@ function UploadScratch(props) {
                 setTags("0")
                 setLoad(false)
                 console.log("Uploaded")
-                
-                
+
+
               })
               .catch((err) => {
                 setIpfsUploadMsg("Error uploading video to IPFS")
@@ -175,7 +175,7 @@ function UploadScratch(props) {
             <button type="submit" className="btn btn-danger btn-block btn-sm" >Upload!</button>
             &nbsp;
           </form>
-          {load&&<h1>Loading....</h1>}
+          {load && <h1>Loading....</h1>}
           {ipfsUploadMsg === "" ? null : <div className="alert alert-danger">{ipfsUploadMsg}</div>}
         </div>
       </div>
