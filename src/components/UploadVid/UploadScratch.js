@@ -7,7 +7,6 @@ import { Redirect } from 'react-router-dom'
 const ipfsClient = require('ipfs-http-client')
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' }) // leaving out the arguments will default to these values
 
-
 const captureFile = (event, setBuffer) => {
   event.preventDefault()
   const file = event.target.files[0]
@@ -95,7 +94,7 @@ function UploadScratch(props) {
 
             uploadVideo(setinit, buffer)
               .then((result) => {
-                setUpload(true)
+                
                 let now = new Date()
                 let newTransaction = {
                   type: "upload",
@@ -108,6 +107,7 @@ function UploadScratch(props) {
                 setDescription("")
                 setTags("0")
                 setLoad(false)
+                setUpload(true)
                 console.log("Uploaded")
 
 

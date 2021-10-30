@@ -66,7 +66,6 @@ function UploadIPFS(props) {
                 console.log(response);
                 console.log("Submitting")
                 setPreview(true)
-                setUpload(true)
                 let now = new Date()
                 let newTransaction = {
                   type: "upload",
@@ -82,6 +81,7 @@ function UploadIPFS(props) {
                 setDescription("")
                 setLoad(false)
                 setTags("0")
+                setUpload(true)
               })
               .catch(function (error) {
 
