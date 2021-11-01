@@ -39,12 +39,46 @@ contract Primary {
 
     constructor() public {}
 
+    function getTagsVideos(uint256 _tag)
+        public
+        view
+        returns (uint256[] memory)
+    {
+        if (_tag == 1) {
+            return Tag1_Videos;
+        } else if (_tag == 2) {
+            return Tag2_Videos;
+        } else if (_tag == 3) {
+            return Tag3_Videos;
+        } else if (_tag == 4) {
+            return Tag4_Videos;
+        } else if (_tag == 5) {
+            return Tag5_Videos;
+        }
+    }
+
+    function getUserName(string memory _publicKey)
+        public
+        view
+        returns (string memory)
+    {
+        return PublicKey_User[_publicKey].userName;
+    }
+
     function getUserSubscriptions(string memory _publicKey)
         public
         view
         returns (string[] memory)
     {
         return PublicKey_User[_publicKey].subscriptions;
+    }
+
+    function getVideoHash(uint256 _id) public view returns (string memory) {
+        return Id_Video[_id].hash;
+    }
+
+    function getVideoTitle(uint256 _id) public view returns (string memory) {
+        return Id_Video[_id].title;
     }
 
     function getUserPlaylist(string memory _publicKey, string memory _playlist)
