@@ -11,7 +11,7 @@ contract Primary {
     uint256[] public Tag3_Videos;
     uint256[] public Tag4_Videos;
     uint256[] public Tag5_Videos;
-    mapping(string => uint256) public Title_Video;
+    mapping(string => uint256[]) public Title_Video;
     mapping(string => uint256[]) public User_Videos;
     mapping(string => User) public PublicKey_User;
     mapping(string => string) public UserName_User;
@@ -79,6 +79,10 @@ contract Primary {
 
     function getVideoTitle(uint256 _id) public view returns (string memory) {
         return Id_Video[_id].title;
+    }
+
+    function getVideo(string memory title) public view returns (uint256[] memory) {
+        return Title_Video[title];
     }
 
     function getUserPlaylist(string memory _publicKey, string memory _playlist)
@@ -224,7 +228,7 @@ contract Primary {
             _tags,
             _creatorId
         );
-        Title_Video[_title] = videoCount;
+        Title_Video[_title].push(videoCount);
         User_Videos[_creatorId].push(videoCount);
         if ((_tags & 1) != 0) {
             Tag1_Videos.push(videoCount);

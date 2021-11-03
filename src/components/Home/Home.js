@@ -109,31 +109,32 @@ function Home() {
         if (user !== null) { subs(); saved(); my(); }
     }, [])
     let compT1 = tag1.map((hash, index) => {
-        return (<Link to={`/video/${hash[0]}`} exact="true" strict="true"><p style={{ width: "150px" }} key={index}>{hash[2]}<video src={`https://ipfs.infura.io/ipfs/${hash[1]}`} /></p></Link>)
+        return (<Link to={`/video/${hash[0]}`} exact="true" strict="true" key={index}  ><p style={{ width: "150px" }} >{hash[2]}<video src={`https://ipfs.infura.io/ipfs/${hash[1]}`} /></p></Link>)
     })
     let compT2 = tag2.map((hash, index) => {
-        return (<Link to={`/video/${hash[0]}`} exact="true" strict="true"><p style={{ width: "150px" }} key={index}>{hash[2]}<video src={`https://ipfs.infura.io/ipfs/${hash[1]}`} /></p></Link>)
+        return (<Link to={`/video/${hash[0]}`} exact="true" strict="true" key={index}  ><p style={{ width: "150px" }} >{hash[2]}<video src={`https://ipfs.infura.io/ipfs/${hash[1]}`} /></p></Link>)
     })
     let compT3 = tag3.map((hash, index) => {
-        return (<Link to={`/video/${hash[0]}`} exact="true" strict="true"><p style={{ width: "150px" }} key={index}>{hash[2]}<video src={`https://ipfs.infura.io/ipfs/${hash[1]}`} /></p></Link>)
+        return (<Link to={`/video/${hash[0]}`} exact="true" strict="true" key={index}  ><p style={{ width: "150px" }} >{hash[2]}<video src={`https://ipfs.infura.io/ipfs/${hash[1]}`} /></p></Link>)
     })
     let compT4 = tag4.map((hash, index) => {
-        return (<Link to={`/video/${hash[0]}`} exact="true" strict="true"><p style={{ width: "150px" }} key={index}>{hash[2]}<video src={`https://ipfs.infura.io/ipfs/${hash[1]}`} /></p></Link>)
+        return (<Link to={`/video/${hash[0]}`} exact="true" strict="true" key={index}  ><p style={{ width: "150px" }} >{hash[2]}<video src={`https://ipfs.infura.io/ipfs/${hash[1]}`} /></p></Link>)
     })
     let compT5 = tag5.map((hash, index) => {
-        return (<Link to={`/video/${hash[0]}`} exact="true" strict="true"><p style={{ width: "150px" }} key={index}>{hash[2]}<video src={`https://ipfs.infura.io/ipfs/${hash[1]}`} /></p></Link>)
+        return (<Link to={`/video/${hash[0]}`} exact="true" strict="true" key={index}  ><p style={{ width: "150px" }} >{hash[2]}<video src={`https://ipfs.infura.io/ipfs/${hash[1]}`} /></p></Link>)
     })
     let compSaved = savedv.map((hash, index) => {
-        return (<Link to={`/video/${hash[0]}`} exact="true" strict="true"><p style={{ width: "150px" }} key={index}>{hash[2]}<video src={`https://ipfs.infura.io/ipfs/${hash[1]}`} /></p></Link>)
+        return (<Link to={`/video/${hash[0]}`} exact="true" strict="true" key={index}  ><p style={{ width: "150px" }} >{hash[2]}<video src={`https://ipfs.infura.io/ipfs/${hash[1]}`} /></p></Link>)
     })
     let compMy = myv.map((hash, index) => {
-        return (<Link to={`/video/${hash[0]}`} exact="true" strict="true"><p style={{ width: "150px" }} key={index}>{hash[2]}<video src={`https://ipfs.infura.io/ipfs/${hash[1]}`} /></p></Link>)
+        return (<Link to={`/video/${hash[0]}`} exact="true" strict="true" key={index}><p style={{ width: "150px" }} >{hash[2]}<video src={`https://ipfs.infura.io/ipfs/${hash[1]}`} /></p></Link>)
     })
     let compSubs = subscriptions.map((sub, index) => {
         let temp = sub.map((hash, index) => {
             if (index === 0) { return null }
-            return (<Link to={`/video/${hash[0]}`} exact="true" strict="true"><p style={{ width: "150px" }} key={index}>{hash[2]}<video src={`https://ipfs.infura.io/ipfs/${hash[1]}`} /></p></Link>)
+            return (<Link to={`/video/${hash[0]}`} exact="true" strict="true"  key={index}><p style={{ width: "150px" }}>{hash[2]}<video src={`https://ipfs.infura.io/ipfs/${hash[1]}`} /></p></Link>)
         })
+console.log(sub)
         return (
             <React.Fragment key={index}>
                 <h4>{sub[0]}</h4>
@@ -141,7 +142,6 @@ function Home() {
             </React.Fragment>
         )
     })
-
     return (
         <div>
             <h1>HOME</h1>
